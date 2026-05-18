@@ -14,14 +14,14 @@ def build_graph():
     graph.add_node("finance", finance_agent)
     graph.add_node("search", search_agent)
     graph.add_node("sentiment", sentiment_agent)
-    graph.add_node("decision", decision_agent)
+    graph.add_node("decide", decision_agent)
 
     graph.set_entry_point("intent")
     graph.add_edge("intent", "finance")
     graph.add_edge("finance", "search")
     graph.add_edge("search", "sentiment")
-    graph.add_edge("sentiment", "decision")
-    graph.add_edge("decision", END)
+    graph.add_edge("sentiment", "decide")
+    graph.add_edge("decide", END)
 
     return graph.compile()
 
