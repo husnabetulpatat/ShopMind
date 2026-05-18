@@ -7,9 +7,12 @@ _redis = redis.from_url(REDIS_URL, decode_responses=True)
 
 
 async def get_rates() -> dict:
-    cached = _redis.get("tcmb:rates")
-    if cached:
-        return json.loads(cached)
+    try:
+        cached = _redis.get("tcmb:rates")
+        if cached:
+            return json.loads(cached)
+    except redis.RedisError:
+        pass # Ignore cache if Redis is down
 
     try:
         async with httpx.AsyncClient(timeout=5) as client:
@@ -24,7 +27,10 @@ async def get_rates() -> dict:
                     rates[code] = float(buying)
                 except ValueError:
                     pass
-        _redis.setex("tcmb:rates", CACHE_TTL, json.dumps(rates))
+        try:
+            _redis.setex("tcmb:rates", CACHE_TTL, json.dumps(rates))
+        except redis.RedisError:
+            pass
         return rates
     except Exception:
         return {"USD": 32.5, "EUR": 35.2}

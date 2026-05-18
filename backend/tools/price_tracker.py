@@ -12,13 +12,19 @@ def record_price(product_name: str, price: float):
     history.append(price)
     if len(history) > 30:
         history = history[-30:]
-    _redis.set(key, json.dumps(history))
+    try:
+        _redis.set(key, json.dumps(history))
+    except redis.RedisError:
+        pass
 
 
 def _get_history(key: str) -> list:
-    raw = _redis.get(key)
-    if raw:
-        return json.loads(raw)
+    try:
+        raw = _redis.get(key)
+        if raw:
+            return json.loads(raw)
+    except redis.RedisError:
+        pass
     return []
 
 

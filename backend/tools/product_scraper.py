@@ -11,9 +11,13 @@ async def search_products(keywords: list[str], budget: float, limit: int = 6) ->
     # Ana sorgu: ilk keyword (search_query) kullan
     main_query = keywords[0] if keywords else ""
     cache_key = f"v4:{main_query[:80]}:{int(budget)}"
-    cached = _redis.get(cache_key)
-    if cached:
-        return json.loads(cached)
+    
+    try:
+        cached = _redis.get(cache_key)
+        if cached:
+            return json.loads(cached)
+    except redis.RedisError:
+        pass # Ignore cache if Redis is down
 
     headers = {"X-API-KEY": SERPER_API_KEY, "Content-Type": "application/json"}
     all_products = []
@@ -37,7 +41,10 @@ async def search_products(keywords: list[str], budget: float, limit: int = 6) ->
 
     result = all_products[:limit]
     if result:
-        _redis.setex(cache_key, CACHE_TTL, json.dumps(result))
+        try:
+            _redis.setex(cache_key, CACHE_TTL, json.dumps(result))
+        except redis.RedisError:
+            pass # Ignore cache save if Redis is down
     return result
 
 
