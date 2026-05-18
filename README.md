@@ -3,6 +3,7 @@
 ShopMind, kullanıcıların bütçe ve ihtiyaçlarına en uygun ürünleri bulmasını sağlayan, çoklu yapay zeka ajanları (Multi-Agent) ile desteklenen gerçek zamanlı bir alışveriş asistanıdır. Google Gemini 2.0 Flash modeli ve LangGraph kullanılarak geliştirilmiştir.
 
 ## 🚀 Canlı Demo
+- Live Demo Video: [Ürünün Videosu](https://youtu.be/4Nmsi_Og6es)
 - **Frontend (Web):** [https://shop-mind-psi.vercel.app](https://shop-mind-psi.vercel.app)
 - **Backend API:** [https://shopmind-production-7967.up.railway.app](https://shopmind-production-7967.up.railway.app)
 
