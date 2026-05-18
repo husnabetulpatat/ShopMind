@@ -19,5 +19,5 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Start the application
+# Start the application (shell form so $PORT is expanded)
 CMD ["/bin/sh", "-c", "uvicorn backend.api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
