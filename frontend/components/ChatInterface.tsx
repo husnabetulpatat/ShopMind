@@ -63,7 +63,10 @@ export default function ChatInterface({ token, initialQuery, onQueryUsed }: Chat
     setResult(null);
     setError("");
 
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000/ws/analyze";
+    // Derive WebSocket URL from API URL (https → wss, http → ws)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const wsBase = apiUrl.replace(/^https:\/\//, "wss://").replace(/^http:\/\//, "ws://");
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || `${wsBase}/ws/analyze`;
     const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
