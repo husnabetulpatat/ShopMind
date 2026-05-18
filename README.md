@@ -1,64 +1,78 @@
-# ShopMind — Agentic E-Ticaret Alışveriş Asistanı
+# ShopMind - Akıllı Alışveriş Asistanı 🛒🤖
 
-BTK Akademi AI Hackathon 2026 projesi. Kullanıcının bütçesini, fiyat trendlerini ve Türkçe kullanıcı yorumlarını analiz eden 5 ajanlı bir e-ticaret karar asistanı.
+ShopMind, kullanıcıların bütçe ve ihtiyaçlarına en uygun ürünleri bulmasını sağlayan, çoklu yapay zeka ajanları (Multi-Agent) ile desteklenen gerçek zamanlı bir alışveriş asistanıdır. Google Gemini 2.0 Flash modeli ve LangGraph kullanılarak geliştirilmiştir.
 
-## Başlangıç
+## 🚀 Canlı Demo
+- **Frontend (Web):** [https://shop-mind-psi.vercel.app](https://shop-mind-psi.vercel.app)
+- **Backend API:** [https://shopmind-production-7967.up.railway.app](https://shopmind-production-7967.up.railway.app)
 
-### 1. API Anahtarları
+## 🎯 Özellikler
+- **Çoklu Ajan Mimarisi (LangGraph):**
+  - `Niyet Ajanı`: Kullanıcının ne istediğini ve bütçesini anlar.
+  - `Finans Ajanı`: Güncel döviz kurlarını çeker ve bütçeyi optimize eder.
+  - `Arama Ajanı`: İnternet üzerinden canlı ürün araması yapar (Serper API).
+  - `Duygu Ajanı`: Ürün yorumlarını analiz ederek kullanıcı hissiyatını ölçer.
+  - `Karar Ajanı`: Elde edilen tüm verileri sentezleyerek en mantıklı ürünü seçer.
+- **Gerçek Zamanlı İletişim:** WebSocket üzerinden ajanların düşünme süreçlerini UI'da anlık olarak görme.
+- **Kimlik Doğrulama:** JWT (JSON Web Token) tabanlı güvenli üyelik ve giriş sistemi.
+- **Arama Geçmişi:** Kullanıcıların önceki analizlerini ve tavsiyelerini saklama.
 
+## 💻 Teknoloji Yığını
+**Frontend:**
+- Next.js (React 19)
+- Vanilla CSS (Modern ve akıcı arayüz tasarımı)
+- WebSocket Client
+- Vercel (Deployment)
+
+**Backend:**
+- Python 3.11, FastAPI
+- LangGraph & LangChain
+- Google GenAI SDK (Gemini-2.0-Flash)
+- PostgreSQL & SQLAlchemy (Asyncpg)
+- Redis (Önbellekleme - Opsiyonel)
+- Docker & Railway (Deployment)
+
+## 🛠️ Kurulum (Lokal Ortam)
+
+Projeyi bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz.
+
+### 1. Depoyu Klonlayın
 ```bash
-cp .env.example .env
-# .env dosyasına GEMINI_API_KEY ve SERPER_API_KEY ekle
+git clone https://github.com/husnabetulpatat/ShopMind.git
+cd ShopMind
 ```
 
-**Gemini API Key:** https://aistudio.google.com/app/apikey (ücretsiz)  
-**Serper API Key:** https://serper.dev (100 ücretsiz sorgu/ay)
-
-### 2. Veritabanı & Cache
-
+### 2. Backend Kurulumu
 ```bash
-docker-compose up -d
-```
-
-### 3. Backend
-
-```bash
-cd backend
+# Backend dizinine geçin ve sanal ortam oluşturun
 python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn api.main:app --reload --port 8000
+source venv/bin/activate  # Windows için: venv\Scripts\activate
+
+# Bağımlılıkları yükleyin
+pip install -r backend/requirements.txt
+
+# Çevre değişkenlerini ayarlayın (Ana dizinde .env dosyası oluşturun)
+# GEMINI_API_KEY=sizin_api_anahtariniz
+# SERPER_API_KEY=sizin_serper_anahtariniz
+# DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5432/shopmind
+
+# Backend'i başlatın
+uvicorn backend.api.main:app --reload --port 8000
 ```
 
-### 4. Frontend
-
+### 3. Frontend Kurulumu
 ```bash
+# Frontend dizinine geçin
 cd frontend
+
+# Bağımlılıkları yükleyin
 npm install
+
+# .env.local dosyası oluşturup backend URL'sini verin
+# NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Geliştirme sunucusunu başlatın
 npm run dev
 ```
 
-Uygulama: http://localhost:3000  
-API Docs: http://localhost:8000/docs
-
-## Mimari
-
-5 ajanlı LangGraph zinciri:
-
-```
-Intent → Finance → Search → Sentiment → Decision
-```
-
-- **Intent Agent** — Kullanıcı sorgusundan ürün, bütçe, kullanım amacı çıkarır
-- **Finance Agent** — TCMB'den döviz kuru çeker, taksit hesabı yapar  
-- **Search Agent** — Serper ile Google Shopping'den ürün bulur, fiyat trendi analiz eder
-- **Sentiment Agent** — Gemini ile Türkçe duygu analizi yapar (paralel)
-- **Decision Agent** — Al / Bekle / Alternatif kararını gerekçesiyle verir
-
-## Stack
-
-- **Backend:** Python, FastAPI, LangGraph, Google Gemini 2.0 Flash
-- **Frontend:** Next.js 15, React 19, TypeScript
-- **Cache:** Redis
-- **DB:** PostgreSQL
-- **Ürün Arama:** Serper Google Shopping API
+Uygulama artık `http://localhost:3000` adresinde çalışıyor olacaktır!
